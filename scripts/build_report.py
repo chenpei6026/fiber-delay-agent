@@ -8,7 +8,7 @@ from xml.sax.saxutils import escape
 from PIL import Image as PILImage, ImageDraw, ImageFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, PageBreak, Preformatted
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.enums import TA_CENTER
@@ -91,6 +91,18 @@ def table(rows,widths):
     t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),HexColor('#e1eef1')),('ROWBACKGROUNDS',(0,1),(-1,-1),[white,HexColor('#f5f8fa')]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('LINEBELOW',(0,0),(-1,0),.5,HexColor('#bad0d7'))]));story.append(t);story.append(Spacer(1,10))
 def page():story.append(PageBreak())
 
+def code_excerpt(relative_path, ranges):
+    """Quote actual source lines; gaps are explicitly marked, never invented code."""
+    lines=(ROOT/relative_path).read_text(encoding='utf-8').splitlines()
+    pieces=[]
+    for start,end in ranges:
+        if pieces: pieces.append('    # ...')
+        pieces.extend(lines[start-1:end])
+    text='\n'.join(pieces)
+    code_style=ParagraphStyle('code',fontName='CN',fontSize=8.2,leading=11,
+        backColor=HexColor('#f2f6f8'),borderPadding=7,spaceAfter=10)
+    story.append(Preformatted(text,code_style));source.append(text)
+
 
 def build():
     figure_assets()
@@ -120,6 +132,19 @@ def build():
     sub('关键计算与调用逻辑')
     p('one_way = length_km * 1000 * n / 299792458 * 1000\nfloor = 2 * one_way\nexcess = rtt_ms - floor\nresult = evaluate_link(**arguments)','small')
     p('数值校验拒绝负长度、NaN、无穷值、布尔值及错误单位类型；未知编号、缺字段和服务不可达给出明确错误。实测RTT比传播下限低0.1ms以上时，优先判断数据矛盾。缺长度时保留工具错误和证据不足结论，不通过猜测补齐。最终输出保留Incident、Observations、Possible Causes、Tool Results、Analysis、Conclusion与Recommendation。')
+    page()
+    h('三、工具函数定义与实际分派（续）')
+    p('以下代码直接摘录src/tools.py和src/agent.py，# ...仅表示省略的实现。三个工具返回结构化字典，参数及调用均可与源代码和运行日志核对。','small')
+    sub('1. 查询工具：编号 → 原始测量')
+    code_excerpt('src/tools.py',[(18,18),(20,23)])
+    p('link_id为字符串编号；查询结果保留模拟数据来源，未知编号抛出ValueError，不返回预写根因。','small')
+    sub('2. 计算与业务检查工具：参数签名和关键返回')
+    code_excerpt('src/tools.py',[(26,27),(33,34),(38,42)])
+    code_excerpt('src/tools.py',[(52,52),(55,56),(59,61)])
+    p('length_km单位km，refractive_index无量纲且默认1.468；rtt_ms为往返毫秒，缺失用None。utilization_pct与loss_pct均为0至100的百分数。budget_ms、measured_ms及propagation_floor_ms均为ms，metric仅允许rtt或one_way；缺测量返回None，不冒充达标。','small')
+    sub('3. Agent 执行模型所选工具并记录证据')
+    code_excerpt('src/agent.py',[(128,133),(150,150)])
+    p('selected来自LLM计划。上例展示查询分支：绑定请求编号、实际调用函数，再将输入和返回值写入traces；计算分支绑定facts后执行evaluate_link(**args)，阈值分支执行check_service(**args)。工具失败写入error日志，完整分支见src/agent.py。','small')
     page()
     h('四、典型工作案例与实际运行')
     p('代表案例C2：用户输入“F1000光纤链路高峰RTT 80ms，信号正常却卡顿，分析原因”，项目RTT预算30ms。模型输出diagnose计划，依次选择query_link、evaluate_link和check_service。候选解释为H1：光路距离限制；H2：负载、路径或处理产生额外时延。')
