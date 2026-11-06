@@ -1,0 +1,9 @@
+﻿case,title,group,verdict,verdict_correct,numeric_correct,tools_correct,task_success,elapsed_seconds
+C1,正常链路,offline_rules,healthy,1,1,1,1,0.0002
+C2,距离不能解释的高延迟,offline_rules,excess_delay,1,1,1,1,0.0003
+C3,传播距离限制,offline_rules,propagation_limited,1,1,1,1,0.0003
+C4,缺失光路长度,offline_rules,insufficient_data,1,,1,1,0.0003
+C5,低于物理下限的矛盾测量,offline_rules,inconsistent_data,1,1,1,1,0.0003
+C6,非法负长度,offline_rules,invalid_input,1,,1,1,0.0001
+C7,只计算传播,offline_rules,healthy,1,1,1,1,0.0001
+C8,只检查业务阈值,offline_rules,healthy,1,,1,1,0.0001

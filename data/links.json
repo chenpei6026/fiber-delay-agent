@@ -1,0 +1,7 @@
+{
+  "F100": {"length_km": 100, "refractive_index": 1.468, "rtt_ms": 2, "utilization_pct": 30, "loss_pct": 0, "source": "模拟快照，非真实运营商监测", "snapshot": "scenario-normal"},
+  "F1000": {"length_km": 1000, "refractive_index": 1.468, "rtt_ms": 80, "utilization_pct": 94, "loss_pct": 1.8, "source": "模拟快照，非真实运营商监测", "snapshot": "scenario-peak"},
+  "F5000": {"length_km": 5000, "refractive_index": 1.468, "rtt_ms": 60, "utilization_pct": 25, "loss_pct": 0.1, "source": "模拟快照，非真实运营商监测", "snapshot": "scenario-longhaul"},
+  "FMISSING": {"length_km": null, "refractive_index": 1.468, "rtt_ms": 80, "utilization_pct": 94, "loss_pct": null, "source": "模拟缺失记录", "snapshot": "scenario-missing"},
+  "FBAD": {"length_km": 5000, "refractive_index": 1.468, "rtt_ms": 5, "utilization_pct": 30, "loss_pct": 0, "source": "模拟矛盾记录，用于质量检查", "snapshot": "scenario-conflict"}
+}

@@ -1,0 +1,3 @@
+# Application, CLI, web UI, tests and evaluation use Python 3.10+ standard library.
+# No pip dependency is required to run the application.
+# Optional report generation: reportlab>=4.0, Pillow>=10.0

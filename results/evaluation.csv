@@ -1,0 +1,17 @@
+﻿case,title,group,verdict,verdict_correct,numeric_correct,tools_correct,task_success,elapsed_seconds
+C1,正常链路,direct_llm,healthy,1,0,,0,3.5212
+C1,正常链路,agent_tools,healthy,1,1,1,1,3.9401
+C2,距离不能解释的高延迟,direct_llm,inconsistent_data,0,0,,0,2.8699
+C2,距离不能解释的高延迟,agent_tools,excess_delay,1,1,1,1,1.8244
+C3,传播距离限制,direct_llm,invalid_input,0,0,,0,2.8915
+C3,传播距离限制,agent_tools,propagation_limited,1,1,1,1,1.7851
+C4,缺失光路长度,direct_llm,inconsistent_data,0,,,0,2.8716
+C4,缺失光路长度,agent_tools,insufficient_data,1,,1,1,1.465
+C5,低于物理下限的矛盾测量,direct_llm,healthy,0,0,,0,3.2746
+C5,低于物理下限的矛盾测量,agent_tools,inconsistent_data,1,1,1,1,1.8601
+C6,非法负长度,direct_llm,invalid_input,1,,,1,2.623
+C6,非法负长度,agent_tools,invalid_input,1,,1,1,1.3728
+C7,只计算传播,direct_llm,propagation_limited,0,0,,0,2.4768
+C7,只计算传播,agent_tools,healthy,1,1,1,1,1.3426
+C8,只检查业务阈值,direct_llm,healthy,1,,,1,2.5144
+C8,只检查业务阈值,agent_tools,healthy,1,,1,1,1.4031

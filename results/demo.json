@@ -1,0 +1,100 @@
+{
+  "verdict": "excess_delay",
+  "one_way_propagation_ms": 4.896721,
+  "Incident": "F1000 光纤链路高峰 RTT 80ms，信号正常却卡顿，分析原因。",
+  "Observations": [
+    "单程传播 4.896721 ms；对称 RTT 传播下限 9.793442 ms。",
+    "实测 RTT 80 ms，额外 RTT 70.206558 ms。"
+  ],
+  "Possible Causes": [
+    "H1：光路传播距离限制业务时延",
+    "H2：负载、路由或处理增加额外时延"
+  ],
+  "Tool Results": [
+    {
+      "tool": "query_link",
+      "arguments": {
+        "link_id": "F1000"
+      },
+      "result": {
+        "link_id": "F1000",
+        "length_km": 1000,
+        "refractive_index": 1.468,
+        "rtt_ms": 80,
+        "utilization_pct": 94,
+        "loss_pct": 1.8,
+        "source": "模拟快照，非真实运营商监测",
+        "snapshot": "scenario-peak"
+      }
+    },
+    {
+      "tool": "evaluate_link",
+      "arguments": {
+        "length_km": 1000,
+        "refractive_index": 1.468,
+        "rtt_ms": 80,
+        "utilization_pct": 94,
+        "loss_pct": 1.8
+      },
+      "result": {
+        "one_way_propagation_ms": 4.896721,
+        "symmetric_rtt_floor_ms": 9.793442,
+        "measured_rtt_ms": 80.0,
+        "excess_rtt_ms": 70.206558,
+        "below_physical_floor": false,
+        "utilization_pct": 94.0,
+        "loss_pct": 1.8,
+        "assumption": "长度为单程实际光路；正反向路径等长；折射率代表群折射率",
+        "source": "calculation",
+        "formula": "t_oneway_ms = length_km * n / 299.792458"
+      }
+    },
+    {
+      "tool": "check_service",
+      "arguments": {
+        "budget_ms": 30,
+        "metric": "rtt",
+        "measured_ms": 80,
+        "propagation_floor_ms": 9.793442
+      },
+      "result": {
+        "budget_ms": 30.0,
+        "metric": "rtt",
+        "measured_ms": 80.0,
+        "propagation_floor_ms": 9.793442,
+        "measurement_pass": false,
+        "propagation_alone_exceeds_budget": false,
+        "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+      }
+    }
+  ],
+  "Analysis": [
+    "RTT 超过预算，且存在传播以外的额外时延，H1 不能单独解释现象。",
+    "利用率达到 85% 经验告警线，支持负载竞争的可能性，但不证明排队是唯一根因。",
+    "丢包超过项目 1% 经验告警线；还应检查错误计数、拥塞和测量偏差。"
+  ],
+  "Conclusion": "excess_delay",
+  "Recommendation": [
+    "收集高低峰 RTT/利用率时间序列，检查接口错误、路径变化和设备处理时延。"
+  ],
+  "mode": "llm",
+  "plan": {
+    "intent": "diagnose",
+    "tools": [
+      "query_link",
+      "evaluate_link",
+      "check_service"
+    ],
+    "reason": "先查询编号对应测量，再计算并检查预算"
+  },
+  "usage": {
+    "completion_tokens": 49,
+    "prompt_tokens": 417,
+    "total_tokens": 466,
+    "prompt_tokens_details": {
+      "cached_tokens": 416
+    }
+  },
+  "elapsed_seconds": 1.1782,
+  "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+}

@@ -1,0 +1,913 @@
+{
+  "metadata": {
+    "timestamp_utc": "2026-11-06T13:31:16.058174+00:00",
+    "mode": "llm",
+    "model": "Qwen3-0.6B-Q8_0",
+    "temperature": 0,
+    "seed": 42,
+    "python": "3.12.14",
+    "numeric_tolerance_ms": 0.01,
+    "repeats": 1
+  },
+  "runs": [
+    {
+      "case": "C1",
+      "group": "direct_llm",
+      "request": {
+        "question": "F100 链路的 RTT 是否正常？请诊断。",
+        "link_id": "F100",
+        "budget_ms": 10,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 0.489672092,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 2,
+        "reason": "测得的同一指标（RTT）<=用户阈值（10ms），且传播下限（0.1ms）未超过预算（10ms），因此业务达标。",
+        "usage": {
+          "completion_tokens": 78,
+          "prompt_tokens": 365,
+          "total_tokens": 443,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 6.2007
+    },
+    {
+      "case": "C1",
+      "group": "agent_tools",
+      "request": {
+        "question": "F100 链路的 RTT 是否正常？请诊断。",
+        "link_id": "F100",
+        "budget_ms": 10,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 0.489672092,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "Incident": "F100 链路的 RTT 是否正常？请诊断。",
+        "Observations": [
+          "'缺少 length_km，无法计算传播时延'"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {},
+            "error": "'缺少 length_km，无法计算传播时延'",
+            "error_kind": "missing_data"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": 10,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "result": {
+              "budget_ms": 10.0,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null,
+              "measurement_pass": null,
+              "propagation_alone_exceeds_budget": null,
+              "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+            }
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "insufficient_data",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "diagnose",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "请提供F100链路的长度和折射率以计算传播和额外RTT。"
+        },
+        "usage": {
+          "completion_tokens": 61,
+          "prompt_tokens": 418,
+          "total_tokens": 479,
+          "prompt_tokens_details": {
+            "cached_tokens": 200
+          }
+        },
+        "elapsed_seconds": 3.3998,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 3.3998
+    },
+    {
+      "case": "C2",
+      "group": "direct_llm",
+      "request": {
+        "question": "F1000 光纤链路高峰 RTT 80ms，信号正常却卡顿，分析原因。",
+        "link_id": "F1000",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "excess_delay",
+        "one_way_propagation_ms": 4.896720918,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "inconsistent_data",
+        "one_way_propagation_ms": 80,
+        "reason": "传播下限超过用户业务预算（30ms）且有明显额外时延（80ms）",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 382,
+          "total_tokens": 446,
+          "prompt_tokens_details": {
+            "cached_tokens": 230
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 3.2753
+    },
+    {
+      "case": "C2",
+      "group": "agent_tools",
+      "request": {
+        "question": "F1000 光纤链路高峰 RTT 80ms，信号正常却卡顿，分析原因。",
+        "link_id": "F1000",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "excess_delay",
+        "one_way_propagation_ms": 4.896720918,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "Incident": "F1000 光纤链路高峰 RTT 80ms，信号正常却卡顿，分析原因。",
+        "Observations": [
+          "'缺少 length_km，无法计算传播时延'"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {},
+            "error": "'缺少 length_km，无法计算传播时延'",
+            "error_kind": "missing_data"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": 30,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "result": {
+              "budget_ms": 30.0,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null,
+              "measurement_pass": null,
+              "propagation_alone_exceeds_budget": null,
+              "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+            }
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "insufficient_data",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "diagnose",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "The link has a peak RTT of 80ms, which is below the user budget of 30ms. This indicates that the link may not be meeting the required service level."
+        },
+        "usage": {
+          "completion_tokens": 78,
+          "prompt_tokens": 429,
+          "total_tokens": 507,
+          "prompt_tokens_details": {
+            "cached_tokens": 362
+          }
+        },
+        "elapsed_seconds": 2.8879,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 2.8879
+    },
+    {
+      "case": "C3",
+      "group": "direct_llm",
+      "request": {
+        "question": "F5000 链路用于 RTT 预算30ms的业务，增加带宽能解决吗？",
+        "link_id": "F5000",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "propagation_limited",
+        "one_way_propagation_ms": 24.483604588,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": 0.1,
+        "reason": "测量RTT低于物理下限0.1ms以上inconsistent_data",
+        "usage": {
+          "completion_tokens": 56,
+          "prompt_tokens": 384,
+          "total_tokens": 440,
+          "prompt_tokens_details": {
+            "cached_tokens": 227
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 3.1382
+    },
+    {
+      "case": "C3",
+      "group": "agent_tools",
+      "request": {
+        "question": "F5000 链路用于 RTT 预算30ms的业务，增加带宽能解决吗？",
+        "link_id": "F5000",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "propagation_limited",
+        "one_way_propagation_ms": 24.483604588,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "Incident": "F5000 链路用于 RTT 预算30ms的业务，增加带宽能解决吗？",
+        "Observations": [
+          "'缺少 length_km，无法计算传播时延'"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {},
+            "error": "'缺少 length_km，无法计算传播时延'",
+            "error_kind": "missing_data"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": 30,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "result": {
+              "budget_ms": 30.0,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null,
+              "measurement_pass": null,
+              "propagation_alone_exceeds_budget": null,
+              "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+            }
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "insufficient_data",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "diagnose",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "The link is used for RTT within the budget of 30ms. Increasing bandwidth may help reduce RTT, but it does not directly address the RTT budget constraint. The link's performance needs to be evaluated to determine if it meets the budget requirements."
+        },
+        "usage": {
+          "completion_tokens": 92,
+          "prompt_tokens": 431,
+          "total_tokens": 523,
+          "prompt_tokens_details": {
+            "cached_tokens": 359
+          }
+        },
+        "elapsed_seconds": 3.1403,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 3.1404
+    },
+    {
+      "case": "C4",
+      "group": "direct_llm",
+      "request": {
+        "question": "FMISSING RTT很高，能确定是距离太远还是排队吗？",
+        "link_id": "FMISSING",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "inconsistent_data",
+        "one_way_propagation_ms": 80,
+        "reason": "测量的RTT应说明信息不足，无法确定是距离太远还是排队。",
+        "usage": {
+          "completion_tokens": 59,
+          "prompt_tokens": 356,
+          "total_tokens": 415,
+          "prompt_tokens_details": {
+            "cached_tokens": 227
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 3.0927
+    },
+    {
+      "case": "C4",
+      "group": "agent_tools",
+      "request": {
+        "question": "FMISSING RTT很高，能确定是距离太远还是排队吗？",
+        "link_id": "FMISSING",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "Incident": "FMISSING RTT很高，能确定是距离太远还是排队吗？",
+        "Observations": [
+          "'缺少 length_km，无法计算传播时延'"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {},
+            "error": "'缺少 length_km，无法计算传播时延'",
+            "error_kind": "missing_data"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": 30,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "result": {
+              "budget_ms": 30.0,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null,
+              "measurement_pass": null,
+              "propagation_alone_exceeds_budget": null,
+              "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+            }
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "insufficient_data",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "diagnose",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "The link ID is missing, so we cannot proceed with evaluating the link. Please provide the link ID for further analysis."
+        },
+        "usage": {
+          "completion_tokens": 63,
+          "prompt_tokens": 417,
+          "total_tokens": 480,
+          "prompt_tokens_details": {
+            "cached_tokens": 359
+          }
+        },
+        "elapsed_seconds": 2.6626,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 2.6626
+    },
+    {
+      "case": "C5",
+      "group": "direct_llm",
+      "request": {
+        "question": "FBAD 的 RTT只有5ms，是不是状态特别好？请检查。",
+        "link_id": "FBAD",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "inconsistent_data",
+        "one_way_propagation_ms": 24.483604588,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 5,
+        "reason": "RTT only 5ms meets the healthy threshold (<= 2t, t=5ms). No invalid input detected. No excess delay or propagation limited.",
+        "usage": {
+          "completion_tokens": 70,
+          "prompt_tokens": 362,
+          "total_tokens": 432,
+          "prompt_tokens_details": {
+            "cached_tokens": 226
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 3.2574
+    },
+    {
+      "case": "C5",
+      "group": "agent_tools",
+      "request": {
+        "question": "FBAD 的 RTT只有5ms，是不是状态特别好？请检查。",
+        "link_id": "FBAD",
+        "budget_ms": 30,
+        "metric": "rtt",
+        "intent": "diagnose"
+      },
+      "expected": {
+        "verdict": "inconsistent_data",
+        "one_way_propagation_ms": 24.483604588,
+        "tools": [
+          "query_link",
+          "evaluate_link",
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "insufficient_data",
+        "one_way_propagation_ms": null,
+        "Incident": "FBAD 的 RTT只有5ms，是不是状态特别好？请检查。",
+        "Observations": [
+          "'缺少 length_km，无法计算传播时延'"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {},
+            "error": "'缺少 length_km，无法计算传播时延'",
+            "error_kind": "missing_data"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": 30,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "result": {
+              "budget_ms": 30.0,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null,
+              "measurement_pass": null,
+              "propagation_alone_exceeds_budget": null,
+              "policy_source": "用户指定的项目演示阈值，不是行业通用语音标准"
+            }
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "insufficient_data",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "diagnose",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "FBAD 的 RTT 只有 5ms，符合 RTT 下限 2t（假设 t=0.1ms），但未达到业务预算 30ms。因此，该状态可能存在问题。"
+        },
+        "usage": {
+          "completion_tokens": 86,
+          "prompt_tokens": 416,
+          "total_tokens": 502,
+          "prompt_tokens_details": {
+            "cached_tokens": 358
+          }
+        },
+        "elapsed_seconds": 3.0728,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 3.0728
+    },
+    {
+      "case": "C6",
+      "group": "direct_llm",
+      "request": {
+        "question": "计算长度-10km、折射率1.468光纤的单程传播时延。",
+        "facts": {
+          "length_km": -10,
+          "refractive_index": 1.468
+        },
+        "intent": "calculate"
+      },
+      "expected": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "evaluate_link"
+        ]
+      },
+      "answer": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": 0,
+        "reason": "长度为-10km的光纤在传播时延计算中存在单位错误，应为+10km。",
+        "usage": {
+          "completion_tokens": 64,
+          "prompt_tokens": 288,
+          "total_tokens": 352,
+          "prompt_tokens_details": {
+            "cached_tokens": 226
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 2.4755
+    },
+    {
+      "case": "C6",
+      "group": "agent_tools",
+      "request": {
+        "question": "计算长度-10km、折射率1.468光纤的单程传播时延。",
+        "facts": {
+          "length_km": -10,
+          "refractive_index": 1.468
+        },
+        "intent": "calculate"
+      },
+      "expected": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "evaluate_link"
+        ]
+      },
+      "answer": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": null,
+        "Incident": "计算长度-10km、折射率1.468光纤的单程传播时延。",
+        "Observations": [
+          "length_km 超出允许范围",
+          "budget_ms 必须是数值"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {
+              "length_km": -10,
+              "refractive_index": 1.468
+            },
+            "error": "length_km 超出允许范围",
+            "error_kind": "invalid_input"
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": null,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": null
+            },
+            "error": "budget_ms 必须是数值",
+            "error_kind": "invalid_input"
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "invalid_input",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "calculate",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "计算长度-10km、折射率1.468光纤的单程传播时延。"
+        },
+        "usage": {
+          "completion_tokens": 60,
+          "prompt_tokens": 420,
+          "total_tokens": 480,
+          "prompt_tokens_details": {
+            "cached_tokens": 200
+          }
+        },
+        "elapsed_seconds": 3.4503,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 3.4503
+    },
+    {
+      "case": "C7",
+      "group": "direct_llm",
+      "request": {
+        "question": "1000km、群折射率1.468的光纤，单程传播时延是多少？只计算。",
+        "facts": {
+          "length_km": 1000,
+          "refractive_index": 1.468
+        },
+        "intent": "calculate"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 4.896720918,
+        "tools": [
+          "evaluate_link"
+        ]
+      },
+      "answer": {
+        "verdict": "propagation_limited",
+        "one_way_propagation_ms": 1000000000000000,
+        "reason": "传播下限超过用户业务预算",
+        "usage": {
+          "completion_tokens": 63,
+          "prompt_tokens": 295,
+          "total_tokens": 358,
+          "prompt_tokens_details": {
+            "cached_tokens": 200
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 2.9119
+    },
+    {
+      "case": "C7",
+      "group": "agent_tools",
+      "request": {
+        "question": "1000km、群折射率1.468的光纤，单程传播时延是多少？只计算。",
+        "facts": {
+          "length_km": 1000,
+          "refractive_index": 1.468
+        },
+        "intent": "calculate"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 4.896720918,
+        "tools": [
+          "evaluate_link"
+        ]
+      },
+      "answer": {
+        "verdict": "invalid_input",
+        "one_way_propagation_ms": 4.896721,
+        "Incident": "1000km、群折射率1.468的光纤，单程传播时延是多少？只计算。",
+        "Observations": [
+          "单程传播 4.896721 ms；对称 RTT 传播下限 9.793442 ms。",
+          "budget_ms 必须是数值"
+        ],
+        "Possible Causes": [
+          "H1：光路传播距离限制业务时延",
+          "H2：负载、路由或处理增加额外时延"
+        ],
+        "Tool Results": [
+          {
+            "tool": "evaluate_link",
+            "arguments": {
+              "length_km": 1000,
+              "refractive_index": 1.468
+            },
+            "result": {
+              "one_way_propagation_ms": 4.896721,
+              "symmetric_rtt_floor_ms": 9.793442,
+              "measured_rtt_ms": null,
+              "excess_rtt_ms": null,
+              "below_physical_floor": null,
+              "utilization_pct": null,
+              "loss_pct": null,
+              "assumption": "长度为单程实际光路；正反向路径等长；折射率代表群折射率",
+              "source": "calculation",
+              "formula": "t_oneway_ms = length_km * n / 299.792458"
+            }
+          },
+          {
+            "tool": "check_service",
+            "arguments": {
+              "budget_ms": null,
+              "metric": "rtt",
+              "measured_ms": null,
+              "propagation_floor_ms": 9.793442
+            },
+            "error": "budget_ms 必须是数值",
+            "error_kind": "invalid_input"
+          }
+        ],
+        "Analysis": [],
+        "Conclusion": "invalid_input",
+        "Recommendation": [
+          "核对参数单位、合法范围和缺失字段后重试。"
+        ],
+        "mode": "llm",
+        "plan": {
+          "intent": "calculate",
+          "tools": [
+            "evaluate_link",
+            "check_service"
+          ],
+          "reason": "计算传播时延时使用evaluate_link工具，传入长度1000km和折射率1.468。检查业务预算和阈值后，确定业务达标。"
+        },
+        "usage": {
+          "completion_tokens": 77,
+          "prompt_tokens": 427,
+          "total_tokens": 504,
+          "prompt_tokens_details": {
+            "cached_tokens": 200
+          }
+        },
+        "elapsed_seconds": 3.7608,
+        "disclosure": "LLM 负责任务理解及工具选择；结论由可审计规则归纳，避免小模型改写数值。"
+      },
+      "error": null,
+      "elapsed_seconds": 3.7608
+    },
+    {
+      "case": "C8",
+      "group": "direct_llm",
+      "request": {
+        "question": "实测单程时延30ms，项目单程预算50ms，是否达标？只查阈值。",
+        "facts": {
+          "one_way_measured_ms": 30
+        },
+        "budget_ms": 50,
+        "metric": "one_way",
+        "intent": "service"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "check_service"
+        ]
+      },
+      "answer": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": 30,
+        "reason": "测得的one_way_值小于预算的50ms，且未达到物理下限0.1ms，但符合业务达标条件",
+        "usage": {
+          "completion_tokens": 68,
+          "prompt_tokens": 297,
+          "total_tokens": 365,
+          "prompt_tokens_details": {
+            "cached_tokens": 200
+          }
+        },
+        "model": "Qwen3-0.6B-Q8_0"
+      },
+      "error": null,
+      "elapsed_seconds": 2.6515
+    },
+    {
+      "case": "C8",
+      "group": "agent_tools",
+      "request": {
+        "question": "实测单程时延30ms，项目单程预算50ms，是否达标？只查阈值。",
+        "facts": {
+          "one_way_measured_ms": 30
+        },
+        "budget_ms": 50,
+        "metric": "one_way",
+        "intent": "service"
+      },
+      "expected": {
+        "verdict": "healthy",
+        "one_way_propagation_ms": null,
+        "tools": [
+          "check_service"
+        ]
+      },
+      "answer": {},
+      "error": "ValueError: 模型工具计划非法",
+      "elapsed_seconds": 3.6061
+    }
+  ]
+}

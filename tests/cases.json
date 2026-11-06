@@ -1,0 +1,10 @@
+[
+  {"id":"C1","title":"正常链路","question":"F100 链路的 RTT 是否正常？请诊断。","link_id":"F100","budget_ms":10,"metric":"rtt","intent":"diagnose","expected":{"verdict":"healthy","one_way_propagation_ms":0.489672092,"tools":["query_link","evaluate_link","check_service"]}},
+  {"id":"C2","title":"距离不能解释的高延迟","question":"F1000 光纤链路高峰 RTT 80ms，信号正常却卡顿，分析原因。","link_id":"F1000","budget_ms":30,"metric":"rtt","intent":"diagnose","expected":{"verdict":"excess_delay","one_way_propagation_ms":4.896720918,"tools":["query_link","evaluate_link","check_service"]}},
+  {"id":"C3","title":"传播距离限制","question":"F5000 链路用于 RTT 预算30ms的业务，增加带宽能解决吗？","link_id":"F5000","budget_ms":30,"metric":"rtt","intent":"diagnose","expected":{"verdict":"propagation_limited","one_way_propagation_ms":24.483604588,"tools":["query_link","evaluate_link","check_service"]}},
+  {"id":"C4","title":"缺失光路长度","question":"FMISSING RTT很高，能确定是距离太远还是排队吗？","link_id":"FMISSING","budget_ms":30,"metric":"rtt","intent":"diagnose","expected":{"verdict":"insufficient_data","one_way_propagation_ms":null,"tools":["query_link","evaluate_link","check_service"]}},
+  {"id":"C5","title":"低于物理下限的矛盾测量","question":"FBAD 的 RTT只有5ms，是不是状态特别好？请检查。","link_id":"FBAD","budget_ms":30,"metric":"rtt","intent":"diagnose","expected":{"verdict":"inconsistent_data","one_way_propagation_ms":24.483604588,"tools":["query_link","evaluate_link","check_service"]}},
+  {"id":"C6","title":"非法负长度","question":"计算长度-10km、折射率1.468光纤的单程传播时延。","facts":{"length_km":-10,"refractive_index":1.468},"intent":"calculate","expected":{"verdict":"invalid_input","one_way_propagation_ms":null,"tools":["evaluate_link"]}},
+  {"id":"C7","title":"只计算传播","question":"1000km、群折射率1.468的光纤，单程传播时延是多少？只计算。","facts":{"length_km":1000,"refractive_index":1.468},"intent":"calculate","expected":{"verdict":"healthy","one_way_propagation_ms":4.896720918,"tools":["evaluate_link"]}},
+  {"id":"C8","title":"只检查业务阈值","question":"实测单程时延30ms，项目单程预算50ms，是否达标？只查阈值。","facts":{"one_way_measured_ms":30},"budget_ms":50,"metric":"one_way","intent":"service","expected":{"verdict":"healthy","one_way_propagation_ms":null,"tools":["check_service"]}}
+]
